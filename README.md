@@ -9,19 +9,23 @@ use autograd::function::*;
 use autograd::node::Node;
 use autograd::tensor::Tensor;
 
-// 10,10の勾配情報を持つtensorの定義
-let x = Tensor::new(&[10,10]);
-let y = Tensor::new(&[10,10]);
+fn main() {
+    // 勾配情報を持つtensorの定義(この場合はスカラー)
+    let x = Tensor::new(&[]);
 
-// x + yの勾配情報を持つ計算グラフの定義
-let z = add(&x, &y);
+    // y = x * x + xの計算グラフを定義する
+    let y = add(&product(&x, &x), &x);
 
-// 計算グラフの計算を行う
-z.forward();
+    // 計算グラフの購買情報をリセット
+    y.zero_grad();
+    
+    // 購買情報を伝搬する前にグラフの最も下のノードの勾配をセットする
+    y.set_grad();
+    
+    // 計算グラフの計算を行う
+    y.forward();
 
-// 計算グラフの勾配情報をリセット
-z.zerograd();
-
-// 計算グラフにおいて勾配を計算
-z.backward();
+    // 計算グラフの勾配を計算する
+    y. backward();
+}
 ```
