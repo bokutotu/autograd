@@ -223,6 +223,8 @@ impl<'a> Node<'a, f32> for MatmulNode<'a, f32> {
             *self.x.get_grad() += &x_grad;
             *self.y.get_grad() += &y_grad;
         }
+        self.x.backward();
+        self.y.backward();
     }
 
     fn zero_grad(&self) {
