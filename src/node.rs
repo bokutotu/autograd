@@ -78,6 +78,8 @@ impl<'a, F: Float> Node<'a, F> for AddNode<'a, F> {
     }
 
     fn forward(&self) {
+        self.x.forward();
+        self.y.forward();
         let borrow_x = self.x.get_input();
         let borrow_y = self.y.get_input();
         let borrow_z = self.z.get_input();
@@ -133,6 +135,8 @@ impl<'a, F: Float> Node<'a, F> for ProductNode<'a, F> {
     }
 
     fn forward(&self) {
+        self.x.forward();
+        self.y.forward();
         let borrow_x = self.x.get_input();
         let borrow_y = self.y.get_input();
         let borrow_z = self.z.get_input();
@@ -151,6 +155,8 @@ impl<'a, F: Float> Node<'a, F> for ProductNode<'a, F> {
             *borrow_x_grad += &((*borrow_z_grad).clone() * (*borrow_y_input).clone());
             *borrow_y_grad += &((*borrow_z_grad).clone() * (*borrow_x_input).clone());
         }
+        self.x.backward();
+        self.y.backward();
     }
 
     fn zero_grad(&self) {
@@ -188,6 +194,8 @@ impl<'a> Node<'a, f32> for MatmulNode<'a, f32> {
     }
 
     fn forward(&self) {
+        self.x.forward();
+        self.y.forward();
         let borrow_x = self.x.get_input();
         let borrow_y = self.y.get_input();
         let borrow_z = self.z.get_input();
